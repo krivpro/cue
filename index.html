@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мои выступления</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Шапка с названием и кнопкой меню -->
+  <div class="header">
+    <button class="header__burger">≡</button>
+    <div class="header__title">Мои выступления</div>
+    <button class="header__songs-btn" id="songsBtn">🎵 Песни</button>
+  </div>
+
+  <!-- Основной контейнер -->
+  <div class="container">
+    <!-- Боковое меню -->
+    <div class="menu">
+      <ul class="menu__list"></ul> <!-- Список выступлений -->
+      <button class="menu__new-btn" id="newSpeechBtn">+ Новое выступление</button>
+    </div>
+
+    <!-- Рабочая область -->
+    <div class="workspace">
+      <div class="workspace__header">
+        <h2 class="workspace__title">Выберите выступление</h2>
+        <button class="workspace__add-set-btn hidden" id="addSetBtn">+ Добавить сет</button>
+      </div>
+      <textarea class="workspace__editor" placeholder="Описание выступления..." id="speechEditor"></textarea>
+      <div class="sets-container" id="setsContainer"></div>
+    </div>
+  </div>
+
+  <!-- Модальное окно для редактирования сета -->
+  <div class="modal" id="setModal">
+    <div class="modal__content modal__content--large">
+      <div class="modal__header">
+        <h3 class="modal__title">Редактирование сета</h3>
+        <button class="modal__close-btn" id="closeSetBtn">✕</button>
+      </div>
+      <div class="modal__body">
+        <div class="form-group">
+          <label>Название сета:</label>
+          <input type="text" id="setNameInput" class="modal__input">
+        </div>
+        
+        <div class="set-songs-section">
+          <div class="set-songs-section__header">
+            <h4>Песни в сете</h4>
+            <button class="set-songs-section__add-btn" id="addSongToSetBtn">+ Добавить песню</button>
+          </div>
+          <div class="set-songs-section__list" id="setSongsList">
+            <!-- Список песен в сете -->
+          </div>
+        </div>
+      </div>
+      <div class="modal__buttons">
+        <button class="modal__btn modal__btn--cancel" id="cancelSetBtn">Отмена</button>
+        <button class="modal__btn modal__btn--confirm" id="saveSetBtn">Сохранить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно для управления песнями -->
+  <div class="modal" id="songsModal">
+    <div class="modal__content modal__content--large">
+      <div class="modal__header">
+        <h3 class="modal__title">Управление песнями</h3>
+        <button class="modal__close-btn" id="closeSongsBtn">✕</button>
+      </div>
+      <div class="modal__body">
+        <div class="songs-controls">
+          <button class="songs__add-btn" id="addSongBtn">+ Добавить песню</button>
+        </div>
+        <div class="songs-list" id="songsList">
+          <!-- Список песен будет здесь -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно для добавления/редактирования песни -->
+  <div class="modal" id="songEditModal">
+    <div class="modal__content">
+      <h3 class="modal__title" id="songEditTitle">Добавить песню</h3>
+      <div class="modal__body">
+        <div class="form-group">
+          <label>Название песни:</label>
+          <input type="text" id="songTitleInput" class="modal__input" placeholder="Введите название песни">
+        </div>
+        <div class="form-group">
+          <label>Текст песни:</label>
+          <textarea id="songTextInput" class="modal__input modal__textarea" placeholder="Введите текст песни..."></textarea>
+        </div>
+      </div>
+      <div class="modal__buttons">
+        <button class="modal__btn modal__btn--cancel" id="cancelSongBtn">Отмена</button>
+        <button class="modal__btn modal__btn--confirm" id="saveSongBtn">Сохранить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно для ошибок -->
+  <div class="modal" id="errorModal">
+    <div class="modal__content">
+      <h3 class="modal__title">Ошибка</h3>
+      <div class="modal__body">
+        <p class="modal__message" id="errorMessage"></p>
+      </div>
+      <div class="modal__buttons">
+        <button class="modal__btn modal__btn--confirm" id="errorOkBtn">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно для добавления песен в сет -->
+  <div class="modal" id="addSongToSetModal">
+    <div class="modal__content modal__content--large">
+      <div class="modal__header">
+        <h3 class="modal__title">Добавить песню в сет</h3>
+        <button class="modal__close-btn" id="closeAddSongToSetBtn">✕</button>
+      </div>
+      <div class="modal__body">
+        <div class="songs-selector">
+          <div class="songs-selector__search">
+            <input type="text" id="songSearchInput" class="modal__input" placeholder="Поиск песен...">
+          </div>
+          <div class="songs-selector__list" id="songsSelectorList">
+            <!-- Список песен для выбора -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно режима выступления -->
+  <div class="modal" id="performanceModal">
+    <div class="modal__content modal__content--fullscreen">
+      <div class="performance-header">
+        <div class="performance-header__info">
+          <h2 class="performance-header__title" id="performanceTitle">Выступление</h2>
+          <div class="performance-header__progress" id="performanceProgress">Песня 1 из 3</div>
+        </div>
+        <div class="performance-header__controls">
+          <button class="performance-header__btn" id="prevSongBtn" title="Предыдущая песня">⏮️</button>
+          <button class="performance-header__btn" id="nextSongBtn" title="Следующая песня">⏭️</button>
+          <button class="performance-header__btn performance-header__btn--close" id="closePerformanceBtn" title="Закрыть">✕</button>
+        </div>
+      </div>
+      <div class="performance-content">
+        <div class="performance-song-info">
+          <h3 class="performance-song-title" id="currentSongTitle">Название песни</h3>
+          <div class="performance-song-number" id="currentSongNumber">1.</div>
+        </div>
+        <div class="performance-song-text" id="currentSongText">
+          <!-- Текст песни будет здесь -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно для подтверждений -->
+  <div class="modal" id="confirmModal">
+    <div class="modal__content">
+      <h3 class="modal__title">Подтверждение</h3>
+      <div class="modal__body">
+        <p class="modal__message" id="confirmMessage"></p>
+      </div>
+      <div class="modal__buttons">
+        <button class="modal__btn modal__btn--cancel" id="confirmCancelBtn">Отмена</button>
+        <button class="modal__btn modal__btn--confirm" id="confirmOkBtn">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/preset-songs.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>
